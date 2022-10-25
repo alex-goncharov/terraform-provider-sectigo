@@ -2,29 +2,13 @@ package sectigo
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 	"terraform-provider-sectigo/sdk"
 	"time"
 
-	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
-
-type certificateTypesResponse struct {
-	Id                  int                 `json:"id"`
-	Name                string              `json:"name"`
-	Description         string              `json:"description"`
-	UseSecondaryOrgName bool                `json:"useSecondaryOrgName"`
-	Terms               []int               `json:"terms"`
-	KeyTypes            map[string][]string `json:"keyTypes"`
-}
-
-type certificateKeyTypes struct {
-	Type   string
-	Values []string
-}
 
 func dataSourceCertificateTypes() *schema.Resource {
 	return &schema.Resource{
@@ -84,8 +68,32 @@ func dataSourceCertificateTypes() *schema.Resource {
 	}
 }
 
-func flattenCertificateTypes(t *sdk.CertificateTypes) {
+func flattenCertificateTypes(t *[]sdk.CertificateTypes) []interface{} {
+	r := make([]interface{}, len(*t), len(*t))
 
+	for i, types := range *t {
+		certTypes := make(map[string]interface{})
+		certTypes["id"] = types.Id
+		certTypes["name"] = types.Name
+		certTypes["description"] = types.Description
+		certTypes["terms"] = types.Terms
+
+		keyTypes := make([]interface{}, len(types.KeyTypes), len(types.KeyTypes))
+
+		j := 0
+		for k, v := range types.KeyTypes {
+			keyType := make(map[string]interface{})
+			keyType["type"] = k
+			keyType["values"] = v
+			keyTypes[j] = keyType
+			j++
+		}
+		certTypes["key_types"] = keyTypes
+
+		r[i] = certTypes
+	}
+
+	return r
 }
 
 func dataSourceCertificateTypesRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
@@ -95,52 +103,13 @@ func dataSourceCertificateTypesRead(ctx context.Context, d *schema.ResourceData,
 	types, err := c.GetCertificateTypes()
 
 	if err != nil {
-		tflog.Debug(ctx, fmt.Sprintf("url %v", c.URL, c))
 		return diag.FromErr(err)
 	}
 
-	/*
-			sdk.NewClient("dataworks_acmeuser_nonprod_eai_3536187",
-		 "fedex-dev",
-		 "quuay0eing7MieR3geisueNgac5choh!"
-		)
-		req.Header.Set("login", "dataworks_acmeuser_nonprod_eai_3536187")
-		req.Header.Set("Accept", "application/json")
-		req.Header.Set("customerUri", "fedex-dev")
-		req.Header.Set("password", "quuay0eing7MieR3geisueNgac5choh!")
-	*/
-
-	xx := make([]interface{}, len(*types), len(*types))
-
-	for i, x := range *types {
-		xxx := make(map[string]interface{})
-		xxx["id"] = x.Id
-		xxx["name"] = x.Name
-		xxx["description"] = x.Description
-		xxx["terms"] = x.Terms
-
-		keyTypes := make([]interface{}, len(x.KeyTypes), len(x.KeyTypes))
-
-		j := 0
-		for k, v := range x.KeyTypes {
-			zz := make(map[string]interface{})
-			zz["type"] = k
-			zz["values"] = v
-			keyTypes[j] = zz
-			j++
-		}
-		xxx["key_types"] = keyTypes
-
-		xx[i] = xxx
-		tflog.Debug(ctx, fmt.Sprintf("XXX value %v", xxx))
-		tflog.Debug(ctx, fmt.Sprintf("XXX value %v", xx))
-	}
-
-	if err := d.Set("certificate_types", xx); err != nil {
+	if err := d.Set("certificate_types", flattenCertificateTypes(types)); err != nil {
 		return diag.FromErr(err)
 	}
 
-	// always run
 	d.SetId(strconv.FormatInt(time.Now().Unix(), 10))
 
 	return diags

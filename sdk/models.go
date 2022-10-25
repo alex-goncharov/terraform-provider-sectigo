@@ -9,15 +9,13 @@ type CertificateTypes struct {
 	KeyTypes            map[string][]string `json:"keyTypes"`
 }
 
-type CustomFieldDefinition struct {
+type CertificateCustomFieldDefinition struct {
 	Id        int    `json:"id"`
 	Name      string `json:"name"`
 	Mandatory bool   `json:"mandatory"`
 }
 
-type CustomFieldDefinitions []CustomFieldDefinition
-
-type CustomField struct {
+type CertificateCustomField struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
 }
@@ -29,21 +27,21 @@ type CertificateRequest struct {
 	CertType          int
 	Term              int
 	Comments          string
-	CustomFields      []CustomField
+	CustomFields      []CertificateCustomField
 	ExternalRequested string
 }
 
 type certificateRequestBody struct {
-	OrgId             int           `json:"orgId"`
-	SubjAltNames      string        `json:"subjAltNames"`
-	CertType          int           `json:"certType"`
-	NumberServers     int           `json:"numberServers"`
-	ServerType        int           `json:"serverType"`
-	Term              int           `json:"term"`
-	Comments          string        `json:"comments"`
-	ExternalRequester string        `json:"externalRequester"`
-	CustomFields      []CustomField `json:"customFields"`
-	Csr               string        `json:"csr"`
+	OrgId             int                      `json:"orgId"`
+	SubjAltNames      string                   `json:"subjAltNames"`
+	CertType          int                      `json:"certType"`
+	NumberServers     int                      `json:"numberServers"`
+	ServerType        int                      `json:"serverType"`
+	Term              int                      `json:"term"`
+	Comments          string                   `json:"comments"`
+	ExternalRequester string                   `json:"externalRequester"`
+	CustomFields      []CertificateCustomField `json:"customFields"`
+	Csr               string                   `json:"csr"`
 }
 
 type CertificateEnrollResponse struct {

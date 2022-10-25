@@ -53,3 +53,23 @@ func (c *Client) GetCertificateTypes() (*[]CertificateTypes, error) {
 
 	return &r, nil
 }
+
+func (c *Client) GetCertificateCustomFieldDefinitions() (*[]CertificateCustomFieldDefinition, error) {
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/ssl/v1/customFields", c.URL), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	r := make([]CertificateCustomFieldDefinition, 0)
+	err = json.Unmarshal(body, &r)
+	if err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
