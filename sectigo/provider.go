@@ -30,6 +30,7 @@ func Provider() *schema.Provider {
 		DataSourcesMap: map[string]*schema.Resource{
 			"sectigo_certificate_types":                    dataSourceCertificateTypes(),
 			"sectigo_certificate_custom_field_definitions": dataSourceCertificateCustomFieldDefinitions(),
+			"sectigo_certificates":                         dataSourceCertificates(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}

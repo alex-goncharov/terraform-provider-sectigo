@@ -48,3 +48,11 @@ type CertificateEnrollResponse struct {
 	ID      string `json:"sslId"`
 	RenewID string `json:"renewId"`
 }
+
+type CertificateListItem struct {
+	Id           int    `json:"sslId"`
+	CommonName   string `json:"commonName"`
+	SerialNumber string `json:"serialNumber"`
+}
+
+type CertificateList []CertificateListItem

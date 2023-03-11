@@ -73,3 +73,23 @@ func (c *Client) GetCertificateCustomFieldDefinitions() (*[]CertificateCustomFie
 
 	return &r, nil
 }
+
+func (c *Client) ListCertificates() (*CertificateList, error) {
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/ssl/v1", c.URL), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		return nil, err
+	}
+
+	r := make(CertificateList, 0)
+	err = json.Unmarshal(body, &r)
+	if err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
