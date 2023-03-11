@@ -14,7 +14,7 @@ func dataSourceCertificateCustomFieldDefinitions() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: dataSourceCertificateCustomFieldDefinitionsRead,
 		Schema: map[string]*schema.Schema{
-			"definitions": {
+			"custom_field_definitions": {
 				Type:     schema.TypeList,
 				Computed: true,
 				Elem: &schema.Resource{
