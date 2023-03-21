@@ -29,6 +29,7 @@ type certificateDataSourceModel struct {
 	Status             types.String            `tfsdk:"status"`
 	SerialNumber       types.String            `tfsdk:"serial_number"`
 	CertificateDetails certificateDetailsModel `tfsdk:"certificate_details"`
+	PemEncodedChain    types.String            `tfsdk:"pem_encoded_chain"`
 }
 
 // coffeesDataSource is the data source implementation.
@@ -69,6 +70,10 @@ func (d *certificateDataSource) Schema(_ context.Context, _ datasource.SchemaReq
 					},
 				},
 			},
+			"pem_encoded_chain": schema.StringAttribute{
+				Description: "PEM encoded certificate with chain.",
+				Computed:    true,
+			},
 		},
 	}
 }
@@ -100,9 +105,21 @@ func (d *certificateDataSource) Read(ctx context.Context, req datasource.ReadReq
 		return
 	}
 
+	pem, err := d.client.CollectPemCertificateWithChain(id.ValueInt64())
+
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Failed to collect Sectigo certificate",
+			fmt.Sprintf("Could not download Sectigo certificate %d: %v", id, err),
+		)
+		return
+	}
+
 	state.Id = id
 	state.Status = types.StringValue(cert.Status)
 	state.SerialNumber = types.StringValue(cert.SerialNumber)
+	state.PemEncodedChain = types.StringValue(string(pem))
+
 	state.CertificateDetails = certificateDetailsModel{
 		Issuer: types.StringValue(cert.CertificateDetails.Issuer),
 	}
