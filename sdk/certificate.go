@@ -34,6 +34,20 @@ func (c *Client) EnrollCertificate(csr *CertificateRequest) (*CertificateEnrollR
 	return &r, err
 }
 
+func (c *Client) CollectPemCertificateWithChain(sslId int64) ([]byte, error) {
+	return c.CollectCertificate(sslId, FormatPem)
+}
+
+func (c *Client) CollectCertificate(sslId int64, format string) ([]byte, error) {
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/ssl/v1/collect/%d/%s", c.URL, sslId, format), nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return c.doRequest(req)
+}
+
 func (c *Client) GetCertificateTypes() (*[]CertificateType, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/ssl/v1/types", c.URL), nil)
 	if err != nil {

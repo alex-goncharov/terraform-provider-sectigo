@@ -15,6 +15,16 @@ type CertificateCustomFieldDefinition struct {
 	Mandatory bool   `json:"mandatory"`
 }
 
+const (
+	FormatX509    = "x509"    // Certificate (w/ chain), PEM encoded
+	FormatX509CO  = "x509CO"  // Certificate only, PEM encoded
+	FormatBase64  = "base64"  // PKCS#7, PEM encoded
+	FormatBin     = "bin"     // PKCS#7, 'x509IO' - for Root/Intermediate(s) only, PEM encoded
+	FormatX509IOR = "x509IOR" // Intermediate(s)/Root only, PEM encoded
+	FormatPem     = "pem"     // Certificate (w/ chain), PEM encoded
+	FormatPemCO   = "pemco"   // Certificate only, PEM encoded
+)
+
 type CertificateCustomField struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
