@@ -34,7 +34,7 @@ func (c *Client) EnrollCertificate(csr *CertificateRequest) (*CertificateEnrollR
 	return &r, err
 }
 
-func (c *Client) GetCertificateTypes() (*[]CertificateTypes, error) {
+func (c *Client) GetCertificateTypes() (*[]CertificateType, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/ssl/v1/types", c.URL), nil)
 	if err != nil {
 		return nil, err
@@ -45,7 +45,7 @@ func (c *Client) GetCertificateTypes() (*[]CertificateTypes, error) {
 		return nil, err
 	}
 
-	r := make([]CertificateTypes, 0)
+	r := make([]CertificateType, 0)
 	err = json.Unmarshal(body, &r)
 	if err != nil {
 		return nil, err
@@ -94,7 +94,7 @@ func (c *Client) ListCertificates() (*CertificateList, error) {
 	return &r, nil
 }
 
-func (c *Client) GetCertificate(id int) (*Certificate, error) {
+func (c *Client) GetCertificate(id int64) (*Certificate, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/ssl/v1/%d", c.URL, id), nil)
 	if err != nil {
 		return nil, err

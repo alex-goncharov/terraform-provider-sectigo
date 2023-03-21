@@ -1,16 +1,16 @@
 package sdk
 
-type CertificateTypes struct {
-	Id                  int                 `json:"id"`
+type CertificateType struct {
+	Id                  int64               `json:"id"`
 	Name                string              `json:"name"`
 	Description         string              `json:"description"`
 	UseSecondaryOrgName bool                `json:"useSecondaryOrgName"`
-	Terms               []int               `json:"terms"`
+	Terms               []int64             `json:"terms"`
 	KeyTypes            map[string][]string `json:"keyTypes"`
 }
 
 type CertificateCustomFieldDefinition struct {
-	Id        int    `json:"id"`
+	Id        int64  `json:"id"`
 	Name      string `json:"name"`
 	Mandatory bool   `json:"mandatory"`
 }
@@ -30,20 +30,20 @@ type CertificateDetails struct {
 
 type Certificate struct {
 	CommonName           string                   `json:"commonName"`
-	SslId                int                      `json:"sslId"`
-	Id                   int                      `json:"id"`
-	OrgId                int                      `json:"orgId"`
+	SslId                int64                    `json:"sslId"`
+	Id                   int64                    `json:"id"`
+	OrgId                int64                    `json:"orgId"`
 	Status               string                   `json:"status"`
-	OrderNumber          int                      `json:"orderNumber"`
+	OrderNumber          int64                    `json:"orderNumber"`
 	BackendCertId        string                   `json:"backendCertId"`
 	Vendor               string                   `json:"vendor"`
-	CertType             CertificateTypes         `json:"certType"`
+	CertType             CertificateType          `json:"certType"`
 	SubType              string                   `json:"subType"`
-	Term                 int                      `json:"term"`
+	Term                 int64                    `json:"term"`
 	Owner                string                   `json:"owner"`
-	OwnerId              int                      `json:"ownerId"`
+	OwnerId              int64                    `json:"ownerId"`
 	Requester            string                   `json:"requester"`
-	RequesterId          int                      `json:"requesterId"`
+	RequesterId          int64                    `json:"requesterId"`
 	RequestedVia         string                   `json:"requestedVia"`
 	Comments             string                   `json:"comments"`
 	Requested            string                   `json:"requested"`
@@ -54,7 +54,7 @@ type Certificate struct {
 	SerialNumber         string                   `json:"serialNumber"`
 	SignatureAlg         string                   `json:"signatureAlg"`
 	KeyAlgorithm         string                   `json:"keyAlgorithm"`
-	KeySize              int                      `json:"keySize"`
+	KeySize              int64                    `json:"keySize"`
 	KeyType              string                   `json:"keyType"`
 	KeyUsages            []string                 `json:"keyUsages"`
 	ExtendedKeyUsages    []string                 `json:"extendedKeyUsages"`
@@ -72,12 +72,12 @@ type Certificate struct {
 }
 
 type CertificateRequest struct {
-	OrgId             int                      `json:"orgId"`
+	OrgId             int64                    `json:"orgId"`
 	SubjAltNames      string                   `json:"subjAltNames"`
-	CertType          int                      `json:"certType"`
-	NumberServers     int                      `json:"numberServers"`
-	ServerType        int                      `json:"serverType"`
-	Term              int                      `json:"term"`
+	CertType          int64                    `json:"certType"`
+	NumberServers     int64                    `json:"numberServers"`
+	ServerType        int64                    `json:"serverType"`
+	Term              int64                    `json:"term"`
 	Comments          string                   `json:"comments"`
 	ExternalRequester string                   `json:"externalRequester"`
 	CustomFields      []CertificateCustomField `json:"customFields"`
@@ -85,12 +85,12 @@ type CertificateRequest struct {
 }
 
 type CertificateEnrollResponse struct {
-	Id      int    `json:"sslId"`
+	Id      int64  `json:"sslId"`
 	RenewId string `json:"renewId"`
 }
 
 type CertificateListItem struct {
-	Id           int    `json:"sslId"`
+	Id           int64  `json:"sslId"`
 	CommonName   string `json:"commonName"`
 	SerialNumber string `json:"serialNumber"`
 }
